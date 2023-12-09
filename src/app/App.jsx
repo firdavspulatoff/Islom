@@ -10,7 +10,6 @@ import { setPlaylist } from "../actions/actions";
 
 const App = () => {
   const { language } = useSelector((state) => state.musicReducer);
-
   const dispatch = useDispatch();
   useEffect(() => {
     if (language === null || language.includes("any")) {

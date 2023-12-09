@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../actions/actions";
 
 function LoginFragment() {
   const [loginValue, setLoginValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const dispatch = useDispatch();
 
   async function onLogin(e) {
     e.preventDefault();
@@ -14,9 +17,12 @@ function LoginFragment() {
     });
     if (data.status !== 200) {
       // alert error
+    } else {
+      localStorage.setItem("token", data?.data?.token);
+      dispatch(setUser(data?.data?.user));
     }
-    console.log(data);
   }
+
   return (
     <form>
       <input

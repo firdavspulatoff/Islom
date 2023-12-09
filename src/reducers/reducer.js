@@ -1,8 +1,9 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
 import musicReducer from "./musicReducer";
-
+import userReducer from "./userReducer";
 const reducers = combineReducers({
-    musicReducer,
+  musicReducer,
+  userReducer,
 });
 
 export default reducers;

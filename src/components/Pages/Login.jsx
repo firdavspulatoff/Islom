@@ -1,12 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeadPhone from "../assets/img/headphones.svg";
 import "./css/Login.scss";
 import LoginFragment from "../fragment/Login";
 import SignupFragment from "../fragment/Signup";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+import axios from "axios";
+import { setUser } from "../../actions/actions";
 
 function Login() {
   let [popupModal, setPopupModal] = useState("login");
+  const dispatch = useDispatch();
+  const { isAuth } = useSelector((state) => state.userReducer);
+  useEffect(() => {
+    async function work() {
+      const token = localStorage.getItem("token");
+      const data = await axios.get("http://localhost:4444/api/v1/users/self", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
+      if (data.status === 200) {
+        dispatch(setUser(data?.data?.user));
+      }
+    }
+    work();
+  });
+  if (isAuth) {
+    return <Redirect to="/home" />;
+  }
   return (
     <section id="main">
       <div className="nav-item">
@@ -32,9 +53,11 @@ function Login() {
           >
             {popupModal === "login" ? "signup" : "login"}
           </p>
-          {/* <Link to={"/home"} className="btn"> */}
-          {/* Start Listening
-            </Link> */}
+
+          {/* <Link to={"/home"} className="btn">
+              Start Listening
+            </Link>
+           */}
         </div>
       </div>
     </section>

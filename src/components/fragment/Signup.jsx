@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { setUser } from "../../actions/actions";
+import { useDispatch } from "react-redux";
 
 function SignupFragment() {
   const [loginValue, setLoginValue] = useState("");
@@ -7,10 +9,10 @@ function SignupFragment() {
   const [firstNameValue, setFirstNameValue] = useState("");
   const [lastNameValue, setLastNameValue] = useState("");
   const [passwordConfirmValue, setPasswordConfirValue] = useState("");
-
+  const dispatch = useDispatch();
   async function onLogin(e) {
     e.preventDefault();
-    console.log(loginValue, passwordValue);
+
     const data = await axios.post("http://localhost:4444/api/v1/users/signup", {
       email: loginValue,
       firstName: firstNameValue,
@@ -20,6 +22,9 @@ function SignupFragment() {
     });
     if (data.status !== 200) {
       // alert error not singuping
+    } else {
+      localStorage.setItem("token", data?.data?.token);
+      dispatch(setUser(data?.data?.user));
     }
   }
 
